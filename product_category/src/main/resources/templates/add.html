@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Product</title>
+</head>
+<body>
+<h1>Add New Product</h1>
+<form th:action="@{/products/add}" th:object="${product}" method="post">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}" id="name" required />
+    </div>
+    <div>
+        <label for="importDate">Import Date:</label>
+        <input type="date" th:field="*{importDate}" id="importDate" required />
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Danh mục</label>
+
+        <!-- Hiển thị lỗi validation (nếu có) -->
+        <small th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="err text-danger"></small>
+
+        <!-- Dropdown chọn Category -->
+        <select class="form-select" id="category" th:field="*{category.id}" required>
+            <option value="">--- Chọn danh mục ---</option>
+            <option
+                    th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}"
+                    th:selected="${product.category != null && product.category.id == category.id}"
+            ></option>
+        </select>
+    </div>
+    <div>
+        <button type="submit">Add Product</button>
+    </div>
+</form>
+<br/>
+<a th:href="@{/products}">Back to Product List</a>
+</body>
+</html>
